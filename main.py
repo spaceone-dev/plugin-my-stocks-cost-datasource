@@ -1,5 +1,9 @@
 from spaceone.cost_analysis.plugin.data_source.lib.server import DataSourcePluginServer
 
+from .manager.cost_manager import CostManager
+from .manager.data_source_manager import DataSourceManager
+from .manager.job_manager import JobManager
+
 app = DataSourcePluginServer()
 
 
@@ -18,7 +22,10 @@ def data_source_init(params: dict) -> dict:
             'metadata': 'dict'
         }
     """
-    pass
+    options = params.get("options", {})
+
+    data_source_manager = DataSourceManager()
+    return data_source_manager.init_response(options)
 
 
 @app.route("DataSource.verify")
@@ -36,7 +43,12 @@ def data_source_verify(params: dict) -> None:
     Returns:
         None
     """
-    pass
+    options = params.get("options", {})
+    secret_data = params.get("secret_data", {})
+    schema = params.get("schema", None)
+
+    data_source_manager = DataSourceManager()
+    data_source_manager.verify_plugin(options, secret_data, schema)
 
 
 @app.route("Job.get_tasks")
@@ -60,7 +72,17 @@ def job_get_tasks(params: dict) -> dict:
         }
 
     """
-    pass
+    options = params.get("options", {})
+    secret_data = params.get("secret_data", {})
+
+    schema = params.get("schema", None)
+    start = params.get("start", None)
+    last_synchronized_at = params.get("last_synchronized_at", None)
+
+    job_manager = JobManager()
+    return job_manager.get_tasks(
+        options, secret_data, schema, start, last_synchronized_at
+    )
 
 
 @app.route("Cost.get_data")
@@ -93,4 +115,11 @@ def cost_get_data(params: dict) -> dict:
             'billed_date': 'str'
         }
     """
-    pass
+    options = params.get("options", {})
+    secret_data = params.get("secret_data", {})
+
+    schema = params.get("schema", None)
+    task_options = params.get("task_options", {})
+
+    cost_manager = CostManager()
+    return cost_manager.get_data(options, secret_data, schema, task_options)

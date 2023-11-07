@@ -1,2 +1,6 @@
 spaceone-core
 spaceone-api
+spaceone-cost-analysis --pre
+numpy
+pandas
+chardet
