@@ -1,8 +1,8 @@
 from spaceone.cost_analysis.plugin.data_source.lib.server import DataSourcePluginServer
 
-from .manager.cost_manager import CostManager
-from .manager.data_source_manager import DataSourceManager
-from .manager.job_manager import JobManager
+from src.plugin.manager.cost_manager import CostManager
+from src.plugin.manager.data_source_manager import DataSourceManager
+from src.plugin.manager.job_manager import JobManager
 
 app = DataSourcePluginServer()
 
